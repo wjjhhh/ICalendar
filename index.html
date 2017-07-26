@@ -1,0 +1,163 @@
+<!Doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+		<meta content="black" name="apple-mobile-web-app-status-bar-style">
+		<meta content="telephone=no" name="format-detection">
+		<meta content="email=no" name="format-detection">
+		<title>lCalendar纯原生js日期时间选择</title>
+		
+		<script src="js/lCalendar.js"></script>
+		
+		<link rel="stylesheet" href="css/lCalendar.css">
+		<style type="text/css">
+			* {
+				margin: 0;
+				padding: 0;
+				-webkit-appearance: none;
+				-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+				-webkit-touch-callout: none;
+				box-sizing: border-box;
+			}
+			
+			html,
+			body {
+				margin: 0 auto;
+				width: 100%;
+				min-height: 100%;
+				overflow-x: hidden;
+				-webkit-user-select: none;
+			}
+			
+			body {
+				font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+				-webkit-text-size-adjust: 100%;
+				-webkit-overflow-scrolling: touch;
+				overflow-scrolling: touch;
+			}
+			
+			h1 {
+				background-color: #19b5ee;
+				color: #fff;
+				font-size: 25px;
+				text-align: center;
+				padding: 10px;
+			}
+			
+			input {
+				width: 90%;
+				height: 40px;
+				font-size: 18px;
+				border: 1px solid #19b5ee;
+				border-radius: 5px;
+				margin: 20px 5% 0 5%;
+				padding: 5px;
+			}
+		</style>
+		
+	</head>
+
+	<body>
+		<h1>lCalendar纯原生js日期时间选择</h1>
+		<div>
+			<input id="demo2" type="text" readonly="" name="input_date" placeholder="日期和时间选择特效"/>
+		</div>
+		<br />
+		<script>
+			var startDate = '2017-7-23';
+			var endDate = '2058-9-30';
+			var start_yy = ~~startDate.split("-")[0];
+			var start_mm = ~~startDate.split("-")[1];
+			var start_dd = ~~startDate.split("-")[2];
+			var end_yy = ~~endDate.split("-")[0];
+            var end_mm = ~~endDate.split("-")[1];
+            var end_dd = ~~endDate.split("-")[2];
+
+			var startTime = '12:30';
+			var endTime = '20:30';
+			var start_hh = ~~startTime.split(":")[0];
+			var start_min = ~~startTime.split(":")[1];
+			var end_hh = ~~endTime.split(":")[0];
+			var end_min = ~~endTime.split(":")[1];
+			var detal_dd = 0;//推迟的天数
+			var calendardatetime = new lCalendar();
+			var now = new Date();
+			var tempYY = now.getFullYear();
+			var tempMM = now.getMonth();
+			var tempDD = now.getDate();
+            var tempHH = now.getHours();
+            var tempMin = now.getMinutes();
+
+            var lastTime = Date.parse(new Date(endDate + ' ' + endTime + ':00'));
+            var firstTime =Date.parse(new Date(startDate + ' ' + startTime + ':00'));
+
+            //可选日期超过最后日期
+			if(lastTime<Date.parse(new Date())){
+			    alert('超过时间')
+			}
+			//可选日期时间在规定期间
+			if(Date.parse(new Date(firstTime))<Date.parse(new Date())){
+                tempYY = now.getFullYear();
+                tempMM = now.getMonth() + 1;
+                tempDD = now.getDate();
+			}
+			//可选日期未到
+			else{
+			    tempYY = start_yy;
+			    tempMM = start_mm;
+			    tempDD = start_dd;
+                tempHH = start_hh;
+                tempMin = start_min;
+			}
+
+			//开始时间逻辑
+//			if(now.getHours() >= end_hh){
+//                //当天时间(小时)已超过最迟规定时间
+//			    if(now.getHours() > end_hh){
+//                    //开始时间的天数推后一天
+//                    detal_dd = 1;
+//                    tempHH = start_hh;
+//				}
+//				else{
+//			    //当天时间（小时）刚好在最迟规定时间
+//					//当前分钟超过最迟规定时间
+//			        if(now.getMinutes() > end_min){
+//                        //开始时间的天数推后一天
+//                        detal_dd = 1;
+//                        tempHH = start_hh;
+//                        tempMin = start_min;
+//					}
+//					else{
+//
+//			            tempMin = now.getMinutes()
+//					}
+//				}
+//
+//			}
+//			else{
+//			    //当前在规定时间之间
+//                if(now.getHours()>start_hh){
+//                    tempHH = now.getHours();
+//				}
+//				//未到规定时间之间
+//				else{
+//                    tempHH = start_hh;
+//				}
+//			}
+            var minDate = tempYY + "-" + (tempMM) + "-" + (tempDD  + detal_dd) + "-" + (tempHH+1) + "-" + tempMin;
+            var maxDate = end_yy + "-" + (end_mm) + "-" + (end_dd) + "-" + (end_hh+1) + "-" + end_min;
+            var gotDate = minDate + "," + maxDate;
+            var limitDate = document.getElementById("demo2")
+			console.log(gotDate)
+            limitDate.setAttribute("data-lcalendar", gotDate); // 设置
+			calendardatetime.init({
+				'trigger': '#demo2',
+				'type': 'datetime'
+			});
+
+		</script>
+	</body>
+
+</html>
